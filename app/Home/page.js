@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import EndPoints from "../../Services/EndPoints";
 import { getRequest } from "../../Services/RestClient";
-import ServiceContainer from '/components/Services/ServicesBox';
+import ServiceContainer from '../../Components/Services/ServicesBox';
 import { Pie, Line } from "react-chartjs-2";
 import { useRouter } from "next/navigation";
 import Badeel from 'Images/Badeel.png'

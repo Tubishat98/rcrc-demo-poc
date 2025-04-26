@@ -1,9 +1,9 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { ChakraProvider } from '@chakra-ui/react';
-import NavBar from '/components/NavBar/Navbar';
-import SideNav from '/components/SideNav/SideNav';
-import Footer from '/components/Footer/Footer';
+import Navbar from '../Components/Navbar/Navbar';
+import SideNav from '../Components/SideNav/SideNav';
+import Footer from '../Components/Footer/Footer';
 const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
     title: 'Royal Comission For Riyadh City',
@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
                 <body className='flex flex-row justify-start'>
                    <SideNav></SideNav> 
                     <div className="flex flex-col w-full background-color-gray-custom" >
-                        <NavBar></NavBar>
+                        <Navbar></Navbar>
                         <div className='background-color-gray-custom'>
                             {children}
                             <span id='loader' className="loader"></span>
