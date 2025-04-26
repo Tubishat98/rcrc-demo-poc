@@ -1544,9 +1544,13 @@ export default function MyCalendar() {
     // Load current user from localStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const savedUser = localStorage.getItem('currentUser');
-            if (savedUser) {
-                setCurrentUser(JSON.parse(savedUser));
+            try {
+                const savedUser = localStorage.getItem('currentUser');
+                if (savedUser) {
+                    setCurrentUser(JSON.parse(savedUser));
+                }
+            } catch (error) {
+                console.error('Error loading user from localStorage:', error);
             }
         }
     }, []);
@@ -1554,16 +1558,24 @@ export default function MyCalendar() {
     // Save current user to localStorage whenever it changes
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            try {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } catch (error) {
+                console.error('Error saving user to localStorage:', error);
+            }
         }
     }, [currentUser]);
 
     // Load comments from localStorage
     useEffect(() => {
         if (typeof window !== 'undefined' && selectedEvent?.id) {
-            const savedComments = localStorage.getItem(`comments_${selectedEvent.id}`);
-            if (savedComments) {
-                setComments(JSON.parse(savedComments));
+            try {
+                const savedComments = localStorage.getItem(`comments_${selectedEvent.id}`);
+                if (savedComments) {
+                    setComments(JSON.parse(savedComments));
+                }
+            } catch (error) {
+                console.error('Error loading comments from localStorage:', error);
             }
         }
     }, [selectedEvent]);
@@ -1571,32 +1583,44 @@ export default function MyCalendar() {
     // Save comments to localStorage
     useEffect(() => {
         if (typeof window !== 'undefined' && selectedEvent?.id) {
-            localStorage.setItem(`comments_${selectedEvent.id}`, JSON.stringify(comments));
+            try {
+                localStorage.setItem(`comments_${selectedEvent.id}`, JSON.stringify(comments));
+            } catch (error) {
+                console.error('Error saving comments to localStorage:', error);
+            }
         }
     }, [comments, selectedEvent]);
 
     // Load saved data from localStorage
     useEffect(() => {
         if (typeof window !== 'undefined' && selectedEvent?.id) {
-            const savedMomNotes = localStorage.getItem(`mom_${selectedEvent.id}`);
-            const savedActionItems = localStorage.getItem(`actionItems_${selectedEvent.id}`);
-            const savedAttendees = localStorage.getItem(`attendees_${selectedEvent.id}`);
-            const savedAttachments = localStorage.getItem(`attachments_${selectedEvent.id}`);
+            try {
+                const savedMomNotes = localStorage.getItem(`mom_${selectedEvent.id}`);
+                const savedActionItems = localStorage.getItem(`actionItems_${selectedEvent.id}`);
+                const savedAttendees = localStorage.getItem(`attendees_${selectedEvent.id}`);
+                const savedAttachments = localStorage.getItem(`attachments_${selectedEvent.id}`);
 
-            if (savedMomNotes) setMomNotes(savedMomNotes);
-            if (savedActionItems) setActionItems(JSON.parse(savedActionItems));
-            if (savedAttendees) setAttendees(JSON.parse(savedAttendees));
-            if (savedAttachments) setAttachments(JSON.parse(savedAttachments));
+                if (savedMomNotes) setMomNotes(savedMomNotes);
+                if (savedActionItems) setActionItems(JSON.parse(savedActionItems));
+                if (savedAttendees) setAttendees(JSON.parse(savedAttendees));
+                if (savedAttachments) setAttachments(JSON.parse(savedAttachments));
+            } catch (error) {
+                console.error('Error loading data from localStorage:', error);
+            }
         }
     }, [selectedEvent]);
 
     // Save data to localStorage
     useEffect(() => {
         if (typeof window !== 'undefined' && selectedEvent?.id) {
-            localStorage.setItem(`mom_${selectedEvent.id}`, momNotes);
-            localStorage.setItem(`actionItems_${selectedEvent.id}`, JSON.stringify(actionItems));
-            localStorage.setItem(`attendees_${selectedEvent.id}`, JSON.stringify(attendees));
-            localStorage.setItem(`attachments_${selectedEvent.id}`, JSON.stringify(attachments));
+            try {
+                localStorage.setItem(`mom_${selectedEvent.id}`, momNotes);
+                localStorage.setItem(`actionItems_${selectedEvent.id}`, JSON.stringify(actionItems));
+                localStorage.setItem(`attendees_${selectedEvent.id}`, JSON.stringify(attendees));
+                localStorage.setItem(`attachments_${selectedEvent.id}`, JSON.stringify(attachments));
+            } catch (error) {
+                console.error('Error saving data to localStorage:', error);
+            }
         }
     }, [momNotes, actionItems, attendees, attachments, selectedEvent]);
 
