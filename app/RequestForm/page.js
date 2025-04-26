@@ -3,9 +3,11 @@ import { useState } from 'react';
 import EndPoints from "../../Services/EndPoints";
 import { postRequest } from "../../Services/RestClient";
 import { useToast } from '@chakra-ui/react'
-import RichTextEditor from 'react-rte';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { useRouter } from "next/navigation";
 import { Button } from '@chakra-ui/react';
+
 export default function RequestForm() {
     const [formData, setFormData] = useState({
         Title: "",
@@ -14,8 +16,12 @@ export default function RequestForm() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
-    const [value, setValue] = useState(RichTextEditor.createEmptyValue());
     const toast = useToast()
+    const editor = useEditor({
+        extensions: [StarterKit],
+        content: '',
+    });
+
     function handleChange(event) {
         const inputId = event.target.id;
         if (inputId === 'Email') {
@@ -28,10 +34,7 @@ export default function RequestForm() {
             [name]: value,
         });
     }
-    function handleRichTextChange(value) {
-        setValue(value);
-        setFormData({ ...formData, Body: value.toString('html') });
-    }
+
     const validateEmail = () => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
         if (!email) {
@@ -94,8 +97,8 @@ export default function RequestForm() {
                     position: 'top-right',
                 });
             });
-
     }
+
     return (
         <form className='p-10' onSubmit={handleSubmit}>
             <div className="space-y-12">
@@ -151,11 +154,7 @@ export default function RequestForm() {
                                 <label htmlFor="Body" className="block text-sm font-medium leading-6 text-gray-900">
                                     Body
                                 </label>
-                                <RichTextEditor
-                                    value={value}
-                                    onChange={handleRichTextChange}
-                                    className="mt-2 height-rich-text-editor"
-                                />
+                                <EditorContent editor={editor} />
                             </div>
                         </div>
                     </div>

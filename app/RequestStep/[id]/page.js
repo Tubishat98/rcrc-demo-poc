@@ -4,7 +4,8 @@ import EndPoints from "../../../Services/EndPoints";
 import { getRequest, postRequest } from "../../../Services/RestClient";
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react'
-import RichTextEditor, { createValueFromString } from 'react-rte';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { useRouter } from "next/navigation";
 
 export default function Page({ params }) {
@@ -24,6 +25,10 @@ export default function Page({ params }) {
     }
     return 'gray';
   };
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: '',
+  });
   useEffect(() => {
     setIsLoading(true);
     getRequest(EndPoints.Service.requestStepDetails + "?requestStepId=" + params.id)
@@ -34,8 +39,7 @@ export default function Page({ params }) {
           EmailTo: result.Value.RequestEmail || "",
         });
         if (result.Value.RequestBody) {
-          const richTextValue = createValueFromString(result.Value.RequestBody, 'html');
-          setValue(richTextValue);
+          editor.commands.setContent(result.Value.RequestBody);
         }
         setIsLoading(false);
       })
@@ -51,17 +55,12 @@ export default function Page({ params }) {
     };
     await handleSubmit();
   }
-  const [value, setValue] = useState(RichTextEditor.createEmptyValue());
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-  }
-  function handleRichTextChange(value) {
-    setValue(value);
-    setFormData({ ...formData, Body: value.toString('html') });
   }
   async function handleSubmit() {
     postRequest(EndPoints.Service.UpdateRequestStepStatus, formDataUpdate)
@@ -136,12 +135,7 @@ export default function Page({ params }) {
                       <label htmlFor="Body" className="block text-sm font-medium leading-6 text-gray-900">
                         Body
                       </label>
-                      <RichTextEditor
-                        readOnly
-                        value={value}
-                        onChange={handleRichTextChange}
-                        className="mt-2 height-rich-text-editor height-rich-text-editor-readOnly"
-                      />
+                      <EditorContent editor={editor} />
                     </div>
                   </div>
                 </div>

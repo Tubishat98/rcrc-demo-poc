@@ -7,8 +7,8 @@ import { Pie, Line } from "react-chartjs-2";
 import { useRouter } from "next/navigation";
 import Badeel from 'Images/Badeel.png'
 import Chart from 'chart.js/auto'
-import SkeletonTable from 'components/Tables/SkeletonTable/SkeletonTable';
-import CustomTable from 'components/Tables/Table/Table';
+import SkeletonTable from '../../Components/Tables/SkeletonTable/SkeletonTable';
+import Table from '../../Components/Tables/Table/Table';
 
 export default function Home() {
     const [requestData, setRequestData] = useState([]);
@@ -162,7 +162,7 @@ export default function Home() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <CustomTable data={requestData} columns={columnsRequest} maxRows='4' />
+                                <Table data={requestData} columns={columnsRequest} maxRows='4' />
                             </div>
                         </div>
                     )}
@@ -187,7 +187,7 @@ export default function Home() {
                                 </div>
                             </div>
                             <div className="flex flex-col">
-                                <CustomTable data={requestStepData} columns={columns} maxRows='4'  />
+                                <Table data={requestStepData} columns={columns} maxRows='4'  />
                             </div>
                         </div>
                     )}

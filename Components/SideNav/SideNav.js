@@ -109,7 +109,7 @@ function SideNav() {
                             initial={{ scale: 0.8 }}
                             animate={{ scale: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="relative w-12 h-12"
+                            className="relative"
                         >
                             <img
                                 className="w-full h-full object-contain"
