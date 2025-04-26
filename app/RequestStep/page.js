@@ -9,11 +9,21 @@ export default function RequestStep() {
     const [requestStepData, setRequestStepData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
-    const storedUser = localStorage.getItem('selectedUser'); 
+    const [userId, setUserId] = useState(null);
     const itemsPerPage = 5;
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('selectedUser');
+        if (storedUser) {
+            setUserId(JSON.parse(storedUser)?.id);
+        }
+    }, []);
+
     const fetchData = () => {
+        if (!userId) return;
+        
         setIsLoading(true);
-        getRequest(EndPoints.Service.requestStepData + "?userID=" + JSON.parse(storedUser)?.id)
+        getRequest(EndPoints.Service.requestStepData + "?userID=" + userId)
             .then((result) => {
                 setRequestStepData(result.ListResponse);
             })
@@ -26,8 +36,11 @@ export default function RequestStep() {
     };
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (userId) {
+            fetchData();
+        }
+    }, [userId]);
+
     function formatDate(dateTimeString) {
         const date = new Date(dateTimeString);
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;

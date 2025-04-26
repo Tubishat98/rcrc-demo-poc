@@ -1513,114 +1513,86 @@ export default function MyCalendar() {
     const [isEditing, setIsEditing] = useState(false);
     const [meetingTags, setMeetingTags] = useState(['Strategy', 'Weekly']);
     const [reminders, setReminders] = useState([]);
-    const [comments, setComments] = useState([
-        {
-            id: 1,
-            user: 'Ahmed Al-Saud',
-            avatar: 'AS',
-            text: 'Great meeting! Looking forward to implementing these changes.',
-            timestamp: new Date(),
-            likes: 2,
-            isLiked: false,
-            replies: [
-                {
-                    id: 2,
-                    user: 'Fatima Al-Rashid',
-                    avatar: 'FR',
-                    text: 'Agreed! The new strategy looks promising.',
-                    timestamp: new Date(),
-                    likes: 1,
-                    isLiked: false
-                }
-            ]
-        },
-        {
-            id: 3,
-            user: 'Khalid Al-Faisal',
-            avatar: 'KF',
-            text: 'Thank you for the detailed presentation. The timeline seems achievable.',
-            timestamp: new Date(),
-            likes: 3,
-            isLiked: false,
-            replies: [
-                {
-                    id: 4,
-                    user: 'Noura Al-Ghamdi',
-                    avatar: 'NG',
-                    text: 'I have some suggestions for the implementation phase.',
-                    timestamp: new Date(),
-                    likes: 1,
-                    isLiked: false
-                }
-            ]
-        }
-    ]);
+    const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [replyingTo, setReplyingTo] = useState(null);
     const [replyText, setReplyText] = useState('');
     const [isSharing, setIsSharing] = useState(false);
-    const [currentUser, setCurrentUser] = useState(() => {
-        const savedUser = localStorage.getItem('currentUser');
-        return savedUser ? JSON.parse(savedUser) : {
-            id: Date.now(),
-            name: 'Mohammad Tubishat',
-            avatar: 'MT',
-            role: 'Manager'
-        };
+    const [currentUser, setCurrentUser] = useState({
+        id: Date.now(),
+        name: 'Mohammad Tubishat',
+        avatar: 'MT',
+        role: 'Manager'
     });
     const [isCreatingMeeting, setIsCreatingMeeting] = useState(false);
     const [newMeeting, setNewMeeting] = useState({
         title: '',
         start: new Date(),
-        end: new Date(new Date().getTime() + 60 * 60 * 1000), // 1 hour later
+        end: new Date(new Date().getTime() + 60 * 60 * 1000),
         description: '',
         location: '',
         type: 'In-person',
         category: 'meeting',
         attendees: [],
-        organizer: currentUser.name,
+        organizer: 'Mohammad Tubishat',
         attachments: [],
         tags: []
     });
     const [newAttendee, setNewAttendee] = useState('');
     const [newTag, setNewTag] = useState('');
 
+    // Load current user from localStorage
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                setCurrentUser(JSON.parse(savedUser));
+            }
+        }
+    }, []);
+
     // Save current user to localStorage whenever it changes
     useEffect(() => {
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
     }, [currentUser]);
 
     // Load comments from localStorage
     useEffect(() => {
-        const savedComments = localStorage.getItem(`comments_${selectedEvent?.id}`);
-        if (savedComments) {
-            setComments(JSON.parse(savedComments));
+        if (typeof window !== 'undefined' && selectedEvent?.id) {
+            const savedComments = localStorage.getItem(`comments_${selectedEvent.id}`);
+            if (savedComments) {
+                setComments(JSON.parse(savedComments));
+            }
         }
     }, [selectedEvent]);
 
     // Save comments to localStorage
     useEffect(() => {
-        if (selectedEvent) {
+        if (typeof window !== 'undefined' && selectedEvent?.id) {
             localStorage.setItem(`comments_${selectedEvent.id}`, JSON.stringify(comments));
         }
     }, [comments, selectedEvent]);
 
     // Load saved data from localStorage
     useEffect(() => {
-        const savedMomNotes = localStorage.getItem(`mom_${selectedEvent?.id}`);
-        const savedActionItems = localStorage.getItem(`actionItems_${selectedEvent?.id}`);
-        const savedAttendees = localStorage.getItem(`attendees_${selectedEvent?.id}`);
-        const savedAttachments = localStorage.getItem(`attachments_${selectedEvent?.id}`);
+        if (typeof window !== 'undefined' && selectedEvent?.id) {
+            const savedMomNotes = localStorage.getItem(`mom_${selectedEvent.id}`);
+            const savedActionItems = localStorage.getItem(`actionItems_${selectedEvent.id}`);
+            const savedAttendees = localStorage.getItem(`attendees_${selectedEvent.id}`);
+            const savedAttachments = localStorage.getItem(`attachments_${selectedEvent.id}`);
 
-        if (savedMomNotes) setMomNotes(savedMomNotes);
-        if (savedActionItems) setActionItems(JSON.parse(savedActionItems));
-        if (savedAttendees) setAttendees(JSON.parse(savedAttendees));
-        if (savedAttachments) setAttachments(JSON.parse(savedAttachments));
+            if (savedMomNotes) setMomNotes(savedMomNotes);
+            if (savedActionItems) setActionItems(JSON.parse(savedActionItems));
+            if (savedAttendees) setAttendees(JSON.parse(savedAttendees));
+            if (savedAttachments) setAttachments(JSON.parse(savedAttachments));
+        }
     }, [selectedEvent]);
 
     // Save data to localStorage
     useEffect(() => {
-        if (selectedEvent) {
+        if (typeof window !== 'undefined' && selectedEvent?.id) {
             localStorage.setItem(`mom_${selectedEvent.id}`, momNotes);
             localStorage.setItem(`actionItems_${selectedEvent.id}`, JSON.stringify(actionItems));
             localStorage.setItem(`attendees_${selectedEvent.id}`, JSON.stringify(attendees));

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import EndPoints from "../../Services/EndPoints";
 import { postRequest } from "../../Services/RestClient";
 import { useToast } from '@chakra-ui/react'
@@ -16,11 +16,19 @@ export default function RequestForm() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [userId, setUserId] = useState(null);
     const toast = useToast()
     const editor = useEditor({
         extensions: [StarterKit],
         content: '',
     });
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('selectedUser');
+        if (storedUser) {
+            setUserId(JSON.parse(storedUser)?.id);
+        }
+    }, []);
 
     function handleChange(event) {
         const inputId = event.target.id;
@@ -51,6 +59,18 @@ export default function RequestForm() {
 
     function handleSubmit(event) {
         event.preventDefault();
+        if (!userId) {
+            toast({
+                title: 'Error.',
+                description: "User not found. Please log in again.",
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
+
         const areAllFieldsFilled = Object.values(formData).every(x => (x !== null && x !== ''));
         if (!areAllFieldsFilled) {
             toast({
@@ -74,7 +94,13 @@ export default function RequestForm() {
             });
             return;
         }
-        postRequest(EndPoints.Service.requestSubmit, formData)
+
+        const submitData = {
+            ...formData,
+            UserId: userId
+        };
+
+        postRequest(EndPoints.Service.requestSubmit, submitData)
             .then((result) => {
                 toast({
                     title: 'Request Submitted Successfully!',
