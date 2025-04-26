@@ -1,6 +1,6 @@
 "use client";
 import './Services.module.css';
-import ServiceBox from '/components/Services/Services';
+import ServiceBox from '../Services/Services';
 function ServiceContainer(props) {
     return (
         <div className="flex gap-4">
