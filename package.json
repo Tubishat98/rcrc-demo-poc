@@ -36,10 +36,8 @@
     "react-countup": "^6.4.2",
     "react-dom": "^18",
     "react-icons": "^5.5.0",
-    "react-richtext": "^1.1.0",
-    "react-router-dom": "^6.16.0",
-    "react-rte": "^0.16.5",
     "react-spring": "^9.7.3",
+    "react-router-dom": "^6.16.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   },
   "devDependencies": {
