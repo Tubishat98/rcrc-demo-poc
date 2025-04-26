@@ -362,7 +362,7 @@ export default function EmailManagementPage() {
                         className="text-gray-400 hover:text-yellow-400 transition-colors"
                       >
                         {starredEmails.has(email.id) ? (
-                          <StarFilled size={18} className="text-yellow-400" />
+                          <Star className="text-yellow-400" size={18} />
                         ) : (
                           <Star size={18} />
                         )}
@@ -375,7 +375,7 @@ export default function EmailManagementPage() {
                         className="text-gray-400 hover:text-green-400 transition-colors"
                       >
                         {pinnedEmails.has(email.id) ? (
-                          <PinFilled size={18} className="text-green-400" />
+                          <Pin className="text-green-400" size={18} />
                         ) : (
                           <Pin size={18} />
                         )}
@@ -386,7 +386,7 @@ export default function EmailManagementPage() {
                         <div className="flex items-center space-x-2">
                           <span className="font-semibold truncate">{email.subject}</span>
                           {pinnedEmails.has(email.id) && (
-                            <PinFilled size={14} className="text-green-400" />
+                            <Pin className="text-green-400" size={14} />
                           )}
                         </div>
                         <span className="text-xs text-gray-400">{email.time}</span>
